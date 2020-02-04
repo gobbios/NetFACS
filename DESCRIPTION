@@ -1,0 +1,34 @@
+Package: netfacstestr
+Title: Network Applications to Facial Communication Data
+Version: 0.0.0.901
+Authors@R: 
+    person(given = "Alex",
+           family = "Mielke",
+           role = c("aut", "cre"),
+           email = "mielke.alexand@gmail.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: What the package does (one paragraph).
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat (>= 2.1.0),
+    knitr,
+    rmarkdown
+Depends:
+    vegan,
+    parallel,
+    doParallel,
+    arules,
+    arulesViz,
+    pbapply,
+    igraph,
+    sna,
+    brms,
+    tidyverse,
+    reshape,
+    ggplot2,
+    mclust,
+    entropy
+RoxygenNote: 7.0.2
+VignetteBuilder: knitr

@@ -1,0 +1,14 @@
+############ still to implement
+
+# create functions that turns different data structures into 0/1 format
+# temporal structure on the element level (probability of element A followed by element B); potentially using Monte Carlo Markov Chains
+# create temporal relationships same way as static relationships to allow for use of same networks etc
+# for temporal relationships, will need directional networks (currently, everything is undirected)
+# for static relationships, we could also implement directional probabilities: is the probability of element A higher or lower than expected if element B is present compared to absent? This could be extracted from the apriori/arules object quite easily
+# we need a way to summarise different facial expressions. There are too many that are probably just variations. For example, ABCD and ABCDE are probably the same 'type' of facial expression; it would be good to have a classifier for that.
+# in anticipation of Bridget's ERC project, we should probably already program a function that can compare within-individual variation with between-individual variation
+# there is already a very simple neural network learning algorithm (i.e., it learns to tell apart different facial expressions and then classifies new cases). This could be expanded on.
+# one thing used in the analysis of bird calls with networks is the analysis of configurations: for example, an element that is preceeded by many different elements, but only ever followed by one other is a 'bottleneck'; three elements that significantly correspond with each other are a 'transitive triad', and so on. These patterns can be biologically meaningful (I think)
+# many networks follow what we can call 'small-world properties': short distance between all elements, high levels of clustering, existence of hubs (some nodes are connected to many others). It would be good to have a way to test whether this is true here, and identify the nodes
+# someone should look into exponential random graph model/ p* models
+
