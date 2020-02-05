@@ -1,5 +1,4 @@
 #' Extract results of 'netfacs' function for specific combination sizes
-#' 
 #' For the selected combination size, the function returns all combinations that had significantly higher probabilities of occuring than expected under the null condition 
 #' 
 #' @param netfacs.data object resulting from netfacs() function

@@ -2,7 +2,8 @@
 % Please edit documentation in R/extract_netfacs.R
 \name{extract.netfacs}
 \alias{extract.netfacs}
-\title{Extract results of 'netfacs' function for specific combination sizes}
+\title{Extract results of 'netfacs' function for specific combination sizes
+For the selected combination size, the function returns all combinations that had significantly higher probabilities of occuring than expected under the null condition}
 \usage{
 \method{extract}{netfacs}(
   netfacs.data,
@@ -30,6 +31,7 @@
 Function returns a dataframe that includes all combinations for the selected combination size that fulfil the selected criteria
 }
 \description{
+Extract results of 'netfacs' function for specific combination sizes
 For the selected combination size, the function returns all combinations that had significantly higher probabilities of occuring than expected under the null condition
 }
 \examples{
