@@ -2,7 +2,6 @@
 #' 
 #' For the selected combination size, the function returns all combinations that had significantly higher probabilities of occuring than expected under the null condition 
 #' 
-#' 
 #' @param netfacs.data object resulting from netfacs() function
 #' @param level combination size for which all remaining combinations should be extracted
 #' @param min.count numeric value, suggesting how many times a combination should at least occur to be displayed

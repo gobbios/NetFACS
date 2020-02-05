@@ -1,4 +1,4 @@
-Package: netfacstestr
+Package: NetFACS
 Title: Network Applications to Facial Communication Data
 Version: 0.0.0.901
 Authors@R: 
@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "mielke.alexand@gmail.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: NetFACS is a statistics package to analyse communication data, mainly for facial expressions, based on network analytical tools.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
