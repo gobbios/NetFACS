@@ -27,25 +27,21 @@ You can get all of the resources for this tutorial from <a href="https://github.
 
 ## 1. The NetFACS package
 
-NetFACS is an R package that facilitates the statistical analysis of data that have a structure similar to that produced by the Facial Action Coding System. Therefore, the basic data structure consists of two objects that the user should prepare for their own data: one object (net.data) consists of columns representing each element (e.g., Action Units)
-At the beginning of your tutorial you can ask people to open `RStudio`, create a new script by clicking on `File/ New File/ R Script` set the working directory and load some packages, for example `ggplot2` and `dplyr`. You can surround package names, functions, actions ("File/ New...") and small chunks of code with backticks, which defines them as inline code blocks and makes them stand out among the text, e.g. `ggplot2`.
-
-When you have a larger chunk of code, you can paste the whole code in the `Markdown` document and add three backticks on the line before the code chunks starts and on the line after the code chunks ends. After the three backticks that go before your code chunk starts, you can specify in which language the code is written, in our case `R`.
-
-To find the backticks on your keyboard, look towards the top left corner on a Windows computer, perhaps just above `Tab` and before the number one key. On a Mac, look around the left `Shift` key. You can also just copy the backticks from below.
+NetFACS is an R package that facilitates the statistical analysis of data that have a structure similar to that produced by the Facial Action Coding System. Therefore, the basic data structure consists of two objects that the user should prepare for their own data: one object (net.data) consists of columns representing each element (e.g., Action Units), and rows containing the absence (0) or presence (1) of each element in this particular event (either a static representation of the whole communication event, or a frame in analyses with temporal information).
 
 ```r
 # Set the working directory
-setwd("your_filepath")
-install.packages('NetFACS/', dependencies = T, repos = "https://cloud.r-project.org/", type="source")
+setwd("/")
 
 # install NetFACS and all dependencies
 install.package('devtools')
-insta
+devtools::install_github("AlexMielke1988/NetFACS", force = T)
 
 # Load packages
-library(ggplot2)
-library(dplyr)
+library(NetFACS)
+
+
+
 ```
 
 <a name="section2"></a>

@@ -13,9 +13,13 @@
 
 create.rule.set <- function(elements, maxlen){
   library(arules)
+  # the arules package takes a list with vectors of elements and calculates the probabilities of combinations, both their absolute probability ('support') and conditional probability ('confidence'). This package extracts the absolute probability.
+  # create arpiori object (basis for arules package)
   ar <- apriori(elements, parameter = list(supp=1/length(elements), conf=1/length(elements), maxlen=maxlen), control = list(verbose = F))
   
-  rs= as(ar, "data.frame") 
+  rs= as(ar, "data.frame") # turns apriori object into data.frame
+  
+  # clean combinations
   rs$rules = gsub("[^A-Za-z0-9, ]","",rs$rules)
   rs$rules = gsub(" ",",",rs$rules)
   xrs = unlist(rs$rules)
@@ -24,6 +28,8 @@ create.rule.set <- function(elements, maxlen){
   })
   x.elements = lapply(x.elements, function(x){sort(x)})
   x.elements = lapply(x.elements, function(x){x[x!='']})
+  
+  # calculate combination size and combine elements into combination variable
   rs$combination.size = sapply(x.elements,FUN = length)
   rs$combination = sapply(x.elements, function(x){paste(x, collapse = '_')})
   rs = rs[,c(7,2:6)]

@@ -17,6 +17,8 @@ element.bayesian(
 \arguments{
 \item{netfacs.data}{object resulting from netfacs() function}
 
+\item{test.elements}{vector of the elements for which the analysis will be carried out; will remove elements for which there is too little variation (present in less than 5% or more than 95% of events)}
+
 \item{formula}{character vector of fixed and random effects, of the format '~ fixed effect 1 + fixed effect 2 + (1|random effect)'}
 
 \item{predictors}{named list with the vectors for each predictor specified in the formula (e.g. 'list(fixed effect 1 = data$fixed.effect1)')}
@@ -31,7 +33,7 @@ element.bayesian(
 Function returns for each element the result object of the brms analysis, the estimates for each level of factors, and a distribution plot for factors
 }
 \description{
-Very basic Bayesian application, takes the dataset from the netfacs object, you define the formula (fixed effects, random effects; ' ~ fixed effect + (1|random effect)') and add the predictors as a named list, and it fits a linear mixed model with Bernoulli distribution for binary data using brms package and presents the probabilities of each element under the different fixed effects
+Very basic Bayesian application, takes the dataset from the netfacs object, you define the formula (' ~ fixed effect + (1|random effect)') and add the predictors as a named list, and it fits a linear mixed model with Bernoulli distribution for binary data using brms package and presents the probabilities of each element under the different fixed effects
 }
 \examples{
 ### how do angry facial expressions differ from non-angry ones?
@@ -47,5 +49,5 @@ angry.face = netfacs(data = emotions_set[[1]],
  combination.size = 5)
  
  ### this takes a while
- bayesian.results = element.bayesian(netfacs.data = angry.face, test.elements = c('1', '23', '4'), formula = '~emotion', predictors = list(emotion = emotions_set[[2]]$emotion), warmup = 1000, iter = 2000, autocorrelation = F)
+ bayesian.results = element.bayesian(netfacs.data = angry.face, test.elements = c('1', '23', '4', '12'), formula = '~emotion', predictors = list(emotion = emotions_set[[2]]$emotion), warmup = 1000, iter = 2000, autocorrelation = F)
 }
