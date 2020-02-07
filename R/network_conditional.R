@@ -5,6 +5,8 @@
 #' 
 #' @param netfacs.data object resulting from netfacs() function
 #' @param package should the graph object be created in sna or igraph?
+#' @param min.prob minimum conditional probability that should be shown in the graph
+#' @param min.count minimum number of times that a combination should occur before being included in the graph
 #'
 #' @return Function returns a dataframe that includes all dyadic combinations and their observed and conditional probabilities
 #' 
@@ -26,7 +28,7 @@
 #'  conditional.net = network.conditional(angry.face, package = 'igraph')
 
 
-network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0){
+network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0, min.count = 0){
   library(arules)
   require(ggplot2)
   require(scales)
@@ -66,6 +68,7 @@ network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0){
   rs$`P(A|B)` = round(rs$`P(A|B)`, 3)
   
   compare.mat = rs[rs$`P(A|B)` >= min.prob,]
+  compare.mat = rs[rs$`count` >= min.count,]
   
   descriptive.graph = graph_from_data_frame(compare.mat, directed = T, vertices = NULL)
   vertex.attributes(descriptive.graph)$element.probability = rs.1$support[match(vertex.attributes(descriptive.graph)$name, rs.1$rules)]
