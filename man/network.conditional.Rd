@@ -4,12 +4,21 @@
 \alias{network.conditional}
 \title{Produce conditional probabilities of dyads of elements, and graph object based on conditional probabilities}
 \usage{
-network.conditional(netfacs.data, package = "igraph", min.prob = 0)
+network.conditional(
+  netfacs.data,
+  package = "igraph",
+  min.prob = 0,
+  min.count = 0
+)
 }
 \arguments{
 \item{netfacs.data}{object resulting from netfacs() function}
 
 \item{package}{should the graph object be created in sna or igraph?}
+
+\item{min.prob}{minimum conditional probability that should be shown in the graph}
+
+\item{min.count}{minimum number of times that a combination should occur before being included in the graph}
 }
 \value{
 Function returns a dataframe that includes all dyadic combinations and their observed and conditional probabilities
