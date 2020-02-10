@@ -2,6 +2,7 @@
 
 S3method(extract,netfacs)
 export(arules.explorer)
+export(arules.return)
 export(combine.columns)
 export(create.rule.set)
 export(element.bayesian)
