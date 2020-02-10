@@ -8,6 +8,7 @@
 #' @param confidence probability that, in the data, the second element occurs if the first element or combination is already in place
 #'
 #' @return Returns the pruned ruleset and plots it using the arulesViz package
+#' 
 #' @export
 #'
 #' @examples
@@ -22,7 +23,6 @@
 #'  random.level = NULL,
 #'  combination.size = 5)
 #' arules.return(netfacs.data = angry.face, confidence = 0.8, support = 0.1)
-
 
 
 arules.return <- function(netfacs.data, confidence = 0.8, support = 0.05){

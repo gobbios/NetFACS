@@ -43,3 +43,11 @@ All network objects can be created as 'igraph' or 'sna', so that all functions f
 ############### 04/02/2020 v.0.0.0.995 Alex
 
 NetFACS has now been moved from 'netfacstestr' to a bespoke GitHub server that can be accessed and that we can work on from here. Tutorial should follow soon.
+
+############### 10/02/2020
+
+There are currently problems with 
+ extract.netfacs function, which is turned into S3method rather than a function by the documentation; 
+ the element.bayesian function, which has problems with the description vignette;
+ the arules.return function, which does not seem to recognise the confidence and support values from the function calls;
+neither of the last two happens when simply sourcing the two functions outside the package, so this must have something to the with how the documentation is created
