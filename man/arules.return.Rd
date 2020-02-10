@@ -18,9 +18,10 @@ Returns the pruned ruleset and plots it using the arulesViz package
 }
 \description{
 Returns rules that satisfy specified 'support' (probability that A and B happen together) and 'confidence' (probability that B occurs if A is present) and plots them
+Rules work by selecting the lowest-order sufficient explanation for the observed data. So, for example, if the combination of A and B explains the occurrence of C, but A alone also explains C, than the rule is A -> C. If A alone does not explain C, and B alone neither, then AB -> C
 }
 \examples{
-data(netfacstestdata)
+data(emotions_set)
 angry.face = netfacs(data = emotions_set[[1]],
  condition = emotions_set[[2]]$emotion,
  test.condition = 'anger',
@@ -30,5 +31,5 @@ angry.face = netfacs(data = emotions_set[[1]],
  control = NULL,
  random.level = NULL,
  combination.size = 5)
-arules.explorer(netfacs.data = netfacstestdata)
+arules.return(netfacs.data = angry.face, confidence = 0.8, support = 0.1)
 }
