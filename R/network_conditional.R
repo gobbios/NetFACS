@@ -67,8 +67,7 @@ network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0, 
   rs$`P(A+B)` = round(rs$`P(A+B)`, 3)
   rs$`P(A|B)` = round(rs$`P(A|B)`, 3)
   
-  compare.mat = rs[rs$`P(A|B)` >= min.prob,]
-  compare.mat = rs[rs$`count` >= min.count,]
+  compare.mat = rs[rs$`P(A|B)` >= min.prob & rs$`count` >= min.count,]
   
   descriptive.graph = graph_from_data_frame(compare.mat, directed = T, vertices = NULL)
   vertex.attributes(descriptive.graph)$element.probability = rs.1$support[match(vertex.attributes(descriptive.graph)$name, rs.1$rules)]
