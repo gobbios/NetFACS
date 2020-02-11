@@ -32,7 +32,7 @@ network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0, 
   library(arules)
   require(ggplot2)
   require(scales)
-  suppressMessages(library(ggnet))
+  suppressMessages(require(ggnet))
   suppressMessages(require(igraph))
   suppressMessages(require(sna))
   suppressMessages(require(intergraph))

@@ -1,6 +1,6 @@
 Package: NetFACS
 Title: Network Applications to Facial Communication Data
-Version: 0.0.0.901
+Version: 0.1
 Authors@R: 
     person(given = "Alex",
            family = "Mielke",
@@ -29,6 +29,7 @@ Depends:
     reshape,
     ggplot2,
     mclust,
-    entropy
+    entropy,
+    ggnet
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr
