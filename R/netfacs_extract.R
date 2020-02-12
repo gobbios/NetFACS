@@ -25,10 +25,10 @@
 #'  random.level = NULL,
 #'  combination.size = 5)
 #'  
-#'  extract.netfacs(angry.face, level = 2, min.count = 5, min.prob = 0.01, min.specificity = 0.5, significance = 0.01)
+#'  netfacs.extract(angry.face, level = 2, min.count = 5, min.prob = 0.01, min.specificity = 0.5, significance = 0.01)
 
 
-extract.netfacs <- function(netfacs.data, level = 1, min.count = 1, min.prob = 0, min.specificity = 0, significance = 0.01){
+netfacs.extract <- function(netfacs.data, level = 1, min.count = 1, min.prob = 0, min.specificity = 0, significance = 0.01){
   
   net.data = netfacs.data$result[netfacs.data$result$combination.size==level,]
   if(is.null(netfacs.data$used.parameters$test.condition)){
