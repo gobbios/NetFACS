@@ -35,29 +35,48 @@ overlap.network <- function(netfacs.list, min.prob = 0, min.count = 5, significa
                                                          x$result$observed.probability >= min.prob
                                                        ,]})
   multi.net = lapply(1:length(net.data), function(x){
-    xx = data.frame(condition = names(net.data)[x], element = net.data[[x]]$combination)
+    xx = data.frame(condition = names(net.data)[x], element = net.data[[x]]$combination, observed.probability = net.data[[x]]$observed.probability, specificity = net.data[[x]]$specificity)
     return(xx)
   })
   
   multi.net = do.call(rbind, multi.net)
   
-  net.graph = graph_from_data_frame(multi.net, directed = F, vertices = NULL)
+  condition.element = multi.net
+  element.condition = multi.net
+  condition.element$observed.probability = NULL
+  element.condition$specificity = NULL
+
+  colnames(condition.element) = c('A', 'B', 'probability')
+  colnames(element.condition) = c('B', 'A', 'probability')
+  condition.element$type = 'Context Specificity (P[Context|Element])'
+  element.condition$type = 'Occurrence Probability (P[Element|Context])'
+
+  net.graph = graph_from_data_frame(rbind(condition.element, element.condition), directed = T, vertices = NULL)
   V(net.graph)$type <- bipartite_mapping(net.graph)$type
-  
   node.color = rep(2, length(vertex.attributes(net.graph)$name))
   node.color[vertex.attributes(net.graph)$name%in%multi.net[,1]] = 3
   node.label = vertex.attributes(net.graph)$name
   node.size = rep(4, length(vertex.attributes(net.graph)$name))
   node.size[vertex.attributes(net.graph)$name%in%multi.net[,1]] = 8
-  edge.size = rep(1, gsize(net.graph))
-  V(net.graph)$size = node.size+4
+  edge.size = edge.attributes(net.graph)$probability * 5
+  V(net.graph)$size = node.size*8
   V(net.graph)$color <- ifelse(V(net.graph)$type, "lightblue", "salmon")
   V(net.graph)$shape <- ifelse(V(net.graph)$type, "circle", "square")
   
+  p <- ggraph(net.graph, layout = 'igraph', algorithm = 'graphopt') + 
+    geom_edge_fan(aes(colour = type), show.legend = F) +
+    geom_node_text(mapping = aes(color = color, label = name, size = 50, fontface = 'bold', font = ), show.legend = F) +
+    scale_edge_alpha(guide = 'none') +
+    facet_edges(~type) + 
+    theme_graph() +
+    geom_edge_link(mapping = aes(
+      label = round(probability, 2)), label_size = 3,
+      arrow = arrow(type = "closed", angle = 15, length = unit(2,'mm')), 
+      end_cap = circle(2, 'mm'), 
+      start_cap = circle(2, 'mm'), 
+      colour="grey",
+      label_dodge  = unit(3, "mm"),
+      angle_calc = "along", show.legend = F)
   
-  p = ggnet2(net.graph, node.size = node.size+2, color = V(net.graph)$color, edge.size = edge.size, label = node.label, label.size = node.size, label.color = 'black', node.shape = V(net.graph)$shape)  +
-    guides(color = FALSE, size = FALSE, shape = F) + ggtitle('Overlap Network') +
-    theme(plot.title = element_text(hjust = 0.5))
-  
-  return(p)
+  return(list(graph = p, data = multi.net))
 }
