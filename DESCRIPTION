@@ -30,6 +30,6 @@ Depends:
     ggplot2,
     mclust,
     entropy,
-    ggnet
+    ggraph
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr
