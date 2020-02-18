@@ -11,4 +11,6 @@
 # one thing used in the analysis of bird calls with networks is the analysis of configurations: for example, an element that is preceeded by many different elements, but only ever followed by one other is a 'bottleneck'; three elements that significantly correspond with each other are a 'transitive triad', and so on. These patterns can be biologically meaningful (I think)
 # many networks follow what we can call 'small-world properties': short distance between all elements, high levels of clustering, existence of hubs (some nodes are connected to many others). It would be good to have a way to test whether this is true here, and identify the nodes
 # someone should look into exponential random graph model/ p* models
+# There should be a way to detect the largest combination that's both common and specific to a context, as a way to find context-specific 'expressions'; that's the opposite of the rules in arules, which try to find the smallest explanatory unit 
+
 

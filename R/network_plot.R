@@ -44,8 +44,8 @@ network.plot <- function(netfacs.graph, title = 'network', clusters = T){
   
   node.label = vertex.attributes(net.graph)$name
   node.size = vertex.attributes(net.graph)$element.significance
-  node.size[node.size >0.01] = 1
-  node.size[node.size <=0.01] = 2
+  node.size[node.size >0.01] = 2
+  node.size[node.size <=0.01] = 3
   node.size[is.na(node.size)] = 1
   edge.weight = edge.attributes(net.graph)$weight
   edge.size = cut(edge.weight, 3)
@@ -60,6 +60,7 @@ network.plot <- function(netfacs.graph, title = 'network', clusters = T){
     p = ggnet2(net.graph, node.size = node.size * 4, color = 'lightblue', edge.size = edge.size, label = node.label, label.size = node.size*3, label.color = 'black', mode = "kamadakawai")  +
       guides(color = FALSE, size = FALSE) + ggtitle(title) +
       theme(plot.title = element_text(hjust = 0.5))
+    
   }
   
   if(clusters == T){
@@ -67,8 +68,9 @@ network.plot <- function(netfacs.graph, title = 'network', clusters = T){
     net.community = igraph::walktrap.community(net.un)
     modular = round(igraph::modularity(net.un, membership = net.community$membership), 2)
     net.com = data.frame(element = net.community$names, community = net.community$membership)
+    color = rainbow(length(unique(net.com$community)))
     
-    p = ggnet2(net.graph, node.size = node.size * 4, color = as.numeric(as.factor(net.com$community)), edge.size = edge.size, label = node.label, label.size = node.size*3, label.color = 'black', mode = "kamadakawai")  +
+    p = ggnet2(net.graph, node.size = node.size * 3, color = color[net.com$community], edge.size = edge.size, label = node.label, label.size = node.size*3, label.color = 'black', mode = "kamadakawai")  +
       guides(color = FALSE, size = FALSE) + ggtitle(paste(c(title, modular), collapse = ' , modularity = ')) +
       theme(plot.title = element_text(hjust = 0.5))
   }

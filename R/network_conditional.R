@@ -96,17 +96,18 @@ network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0, 
   edge.size = as.numeric(edge.size.char)
   if(length(unique(edge.size))==1){edge.size = edge.size/edge.size}
   
-  p = ggraph(graph = net.graph, layout = 'linear', circular = T) +
-    geom_node_circle(size = 0.8, mapping = aes(r =0.03), fill="lightblue") +
-    geom_edge_link(mapping = aes (label = weight),
-                   arrow = arrow(type = "closed", angle = 15), 
-                   end_cap = circle(4, 'mm'), , 
-                   start_cap = circle(4, 'mm'), 
+  p = ggraph(graph = net.graph, layout = 'igraph', algorithm = 'kk') +
+    geom_edge_link(mapping = aes (label = weight), label_size = 3,
+                   arrow = arrow(type = "closed", angle = 15, length = unit(3,'mm')), 
+                   end_cap = circle(2, 'mm'), , 
+                   start_cap = circle(2, 'mm'), 
                    colour="grey",
                    label_dodge  = unit(3, "mm"),
-                   angle_calc = "along") +
-    geom_node_text(mapping = aes(label = name)) +
+                   angle_calc = "along", show.legend = F) +
+    geom_node_text(mapping = aes(label = name, size = 50, fontface = 'bold'), show.legend = F) +
+    scale_edge_alpha(guide = 'none') +
     theme_graph()
+  
   
   
   return(list(conditional.probalities = rs, network.graph = descriptive.graph, plot = p))

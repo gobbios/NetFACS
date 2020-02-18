@@ -9,6 +9,7 @@ overlap.network(
   min.prob = 0,
   min.count = 5,
   significance = 0.01,
+  specificity = 0.1,
   ignore.element = NULL
 )
 }
