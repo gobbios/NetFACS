@@ -21,7 +21,7 @@
 #'  overlap.network(emo.faces)
 
 
-overlap.network <- function(netfacs.list, min.prob = 0, min.count = 5, significance = 0.01, specificity = 0.1, ignore.element = NULL){
+overlap.network <- function(netfacs.list, min.prob = 0, min.count = 5, significance = 0.01, specificity = 0.1, ignore.element = NULL, clusters = F){
   require(igraph)
   require(ggplot2)
   require(ggnet)
@@ -62,15 +62,15 @@ overlap.network <- function(netfacs.list, min.prob = 0, min.count = 5, significa
   V(net.graph)$size = node.size*8
   V(net.graph)$color <- ifelse(V(net.graph)$type, "lightblue", "salmon")
   V(net.graph)$shape <- ifelse(V(net.graph)$type, "circle", "square")
+  if(clusters == T){V(net.graph)$color <-cluster_fast_greedy(as.undirected(net.graph))$membership}
   
   p <- ggraph(net.graph, layout = 'igraph', algorithm = 'kk') + 
-    geom_edge_fan(aes(colour = type), show.legend = F) +
     geom_node_text(mapping = aes(color = color, label = name, size = 50, fontface = 'bold'), show.legend = F) +
     scale_edge_alpha(guide = 'none') +
     facet_edges(~type) + 
-    theme_graph() +
-    geom_edge_link(mapping = aes(
-      label = round(probability, 2)), label_size = 3,
+    theme_graph(base_family = "sans") +
+    geom_edge_fan(mapping = aes(
+      label = round(probability, 2), colour = type), label_size = 3,
       arrow = arrow(type = "closed", angle = 15, length = unit(2,'mm')), 
       end_cap = circle(2, 'mm'), 
       start_cap = circle(2, 'mm'), 
@@ -79,7 +79,7 @@ overlap.network <- function(netfacs.list, min.prob = 0, min.count = 5, significa
       angle_calc = "along", show.legend = F)
   
   
-  multi.net.short = multi.net[multi.net$observed.probability>0.5 & multi.net$specificity>specificity,]
+  multi.net.short = multi.net[multi.net$specificity>specificity,]
   net.graph.short = graph_from_data_frame(multi.net.short, directed = F, vertices = NULL)
   V(net.graph.short)$type <- bipartite_mapping(net.graph.short)$type
   node.color = rep(2, length(vertex.attributes(net.graph.short)$name))
@@ -91,12 +91,18 @@ overlap.network <- function(netfacs.list, min.prob = 0, min.count = 5, significa
   V(net.graph.short)$size = node.size*8
   V(net.graph.short)$color <- ifelse(V(net.graph.short)$type, "lightblue", "salmon")
   V(net.graph.short)$shape <- ifelse(V(net.graph.short)$type, "circle", "square")
-  
+  V(net.graph.short)$shape <- ifelse(V(net.graph.short)$type, "bold", "italic")
+  if(clusters == T){
+    xx = data.frame(com = cluster_fast_greedy(as.undirected(net.graph))$membership, node = V(net.graph)$name)
+    xx = xx$com[match(V(net.graph.short)$name, V(net.graph)$name)]
+    xx = xx[complete.cases(xx)]
+    V(net.graph.short)$color <- xx
+  }
   q <- ggraph(net.graph.short, layout = 'igraph', algorithm = 'kk') + 
-    geom_node_text(mapping = aes(color = color, label = name, size = 50, fontface = 'bold'), show.legend = F) +
+    geom_node_text(mapping = aes(color = color, label = name, size = 50, fontface = shape), show.legend = F) +
     scale_edge_alpha(guide = 'none') +
-    theme_graph() +
-    geom_edge_link(
+    theme_graph(base_family = "sans") +
+    geom_edge_fan(
       arrow = NULL, 
       end_cap = circle(2, 'mm'), 
       start_cap = circle(2, 'mm'), 
@@ -105,5 +111,5 @@ overlap.network <- function(netfacs.list, min.prob = 0, min.count = 5, significa
       angle_calc = "along", show.legend = F)
   
   
-  return(list(graph = p, data = multi.net, reduced.graph = q))
+  return(list(graph = p, data = multi.net, reduced.graph = q, network = net.graph, modularity = modularity(cluster_fast_greedy(as.undirected(net.graph)))))
 }

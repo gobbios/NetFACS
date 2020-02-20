@@ -25,10 +25,12 @@
 
 network.summary.graph <- function(netfacs.net){
   require(igraph)
+  if(length(unique(edge.attributes(netfacs.net)$weight))==1){type='undirected'}
+  if(length(unique(edge.attributes(netfacs.net)$weight))>1){type='weighted'}
   net.from.igraph = data.frame(nr.elements = length(vertex.attributes(netfacs.net)$name),
                                nr.edges = length(edge.attributes(netfacs.net)$weight),
                                density =  edge_density(simplify(netfacs.net), loops=F),
-                               transitivity =  transitivity(simplify(netfacs.net), type="global"),
+                               transitivity =  transitivity(simplify(netfacs.net), type = type),
                                diameter =  diameter(simplify(netfacs.net), directed = F),
                                degree_centralization =  centr_degree(simplify(netfacs.net))$centralization,
                                mean_distance =  mean_distance(simplify(netfacs.net))

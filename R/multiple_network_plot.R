@@ -58,7 +58,17 @@ multiple.network.plot <- function(netfacs.graphs){
     node.size[node.size > 0.01] = 10
     node.size[node.size <= 0.01] = 20
     node.size[is.na(node.size)] = 0
-    plot(net.i, vertex.color=colors()[i*3], layout=l, main=names(netfacs.graphs)[i], edge.width = 2, vertex.size = node.size)
+    
+    edge.weight = edge.attributes(net.i)$weight
+    edge.size = cut(edge.weight, 3)
+    edge.size.char = as.character(edge.size)
+    edge.size.char[edge.size==levels(edge.size)[1]] = 1
+    edge.size.char[edge.size==levels(edge.size)[2]] = 3
+    edge.size.char[edge.size==levels(edge.size)[3]] = 5
+    edge.size = as.numeric(edge.size.char)
+    if(length(unique(edge.size))==1){edge.size = edge.size/edge.size}
+    
+    plot(net.i, vertex.color=colors()[i*3], layout=l, main=names(netfacs.graphs)[i], edge.width = edge.size, vertex.size = node.size)
   }
   p <- recordPlot()
   invisible(dev.off())

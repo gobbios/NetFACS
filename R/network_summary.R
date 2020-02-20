@@ -61,7 +61,10 @@ network.summary <- function(netfacs.graph){
     if(length(xx)==0){return(0)}
   }))
   
-  net.trans = igraph::transitivity(netfacs.graph, type = 'weighted', weights = edge.attributes(netfacs.graph)$weight)
+  if(length(unique(edge.attributes(netfacs.graph)$weight))==1){type='undirected'}
+  if(length(unique(edge.attributes(netfacs.graph)$weight))>1){type='weighted'}
+  net.trans = igraph::transitivity(netfacs.graph, type = 'local', weights = edge.attributes(netfacs.graph)$weight)
+  names(net.trans) = V(netfacs.graph)$name
   net.measure$transitivity = unlist(lapply(1:nrow(net.measure), function(y){
     xx=net.trans[names(net.trans)==net.measure$element[y]]
     if(length(xx)==1){return(xx)}

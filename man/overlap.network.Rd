@@ -10,7 +10,8 @@ overlap.network(
   min.count = 5,
   significance = 0.01,
   specificity = 0.1,
-  ignore.element = NULL
+  ignore.element = NULL,
+  clusters = F
 )
 }
 \arguments{

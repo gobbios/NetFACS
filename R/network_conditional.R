@@ -75,6 +75,7 @@ network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0, 
   
   missing.nodes = setdiff(rs.1$rules, V(descriptive.graph)$name)
   descriptive.graph = add_vertices(descriptive.graph, length(missing.nodes), attr = list(name = missing.nodes))
+  descriptive.graph = delete_vertices(descriptive.graph, igraph::degree(descriptive.graph)==0)
   
   if(package == 'sna'){
     descriptive.graph = intergraph::asNetwork(descriptive.graph)
