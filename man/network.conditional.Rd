@@ -8,7 +8,8 @@ network.conditional(
   netfacs.data,
   package = "igraph",
   min.prob = 0,
-  min.count = 0
+  min.count = 0,
+  ignore.element = NULL
 )
 }
 \arguments{
