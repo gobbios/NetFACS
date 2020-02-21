@@ -48,8 +48,44 @@ overlap.network <- function(netfacs.list, min.prob = 0, min.count = 5, significa
 
   colnames(condition.element) = c('A', 'B', 'probability')
   colnames(element.condition) = c('B', 'A', 'probability')
+  element.condition = element.condition[,c('A', 'B', 'probability')]
   condition.element$type = 'Context Specificity (P[Context|Element])'
   element.condition$type = 'Occurrence Probability (P[Element|Context])'
+  
+  if(clusters == T){
+    net.graph = graph_from_data_frame(element.condition, directed = F, vertices = NULL)
+    V(net.graph)$type <- bipartite_mapping(net.graph)$type
+    memb.colour = data.frame(com = cluster_fast_greedy(as.undirected(net.graph))$membership, node = V(net.graph)$name)
+  }
+  
+  
+  net.graph = graph_from_data_frame(element.condition, directed = T, vertices = NULL)
+  V(net.graph)$type <- bipartite_mapping(net.graph)$type
+  node.color = rep(2, length(vertex.attributes(net.graph)$name))
+  node.color[vertex.attributes(net.graph)$name%in%multi.net[,1]] = 3
+  node.label = vertex.attributes(net.graph)$name
+  node.size = rep(4, length(vertex.attributes(net.graph)$name))
+  node.size[vertex.attributes(net.graph)$name%in%multi.net[,1]] = 8
+  edge.size = edge.attributes(net.graph)$probability * 5
+  V(net.graph)$size = node.size*8
+  V(net.graph)$color <- ifelse(V(net.graph)$type, "salmon", "lightblue")
+  V(net.graph)$shape <- ifelse(V(net.graph)$type, "circle", "square")
+  if(clusters == T){V(net.graph)$color = memb.colour$com[match(memb.colour$node, V(net.graph)$name)]}
+  all.layout <- create_layout(net.graph, layout = 'igraph', algorithm = 'kk')
+  
+  p.occurrence <- ggraph(all.layout) + 
+    geom_node_text(mapping = aes(color = color, label = name, size = 50, fontface = 'bold'), show.legend = F) +
+    scale_edge_alpha(guide = 'none') +
+    theme_graph(base_family = "sans") +
+    ggtitle('Occurrence Probability P(Element|Context)') +
+    geom_edge_fan(mapping = aes(
+      label = round(probability, 2), colour = type), label_size = 3,
+      arrow = arrow(type = "closed", angle = 15, length = unit(2,'mm')), 
+      end_cap = circle(2, 'mm'), 
+      start_cap = circle(2, 'mm'), 
+      colour="grey",
+      label_dodge  = unit(3, "mm"),
+      angle_calc = "along", show.legend = F)
 
   net.graph = graph_from_data_frame(rbind(condition.element, element.condition), directed = T, vertices = NULL)
   V(net.graph)$type <- bipartite_mapping(net.graph)$type
@@ -62,9 +98,13 @@ overlap.network <- function(netfacs.list, min.prob = 0, min.count = 5, significa
   V(net.graph)$size = node.size*8
   V(net.graph)$color <- ifelse(V(net.graph)$type, "lightblue", "salmon")
   V(net.graph)$shape <- ifelse(V(net.graph)$type, "circle", "square")
-  if(clusters == T){V(net.graph)$color <-cluster_fast_greedy(as.undirected(net.graph))$membership}
+  if(clusters == T){V(net.graph)$color = memb.colour$com[match(V(net.graph)$name, memb.colour$node)]}
+  both.layout <- create_layout(net.graph, layout = 'igraph', algorithm = 'kk')
+  both.layout$x = all.layout$x[match(both.layout$name, all.layout$name)]
+  both.layout$y = all.layout$y[match(both.layout$name, all.layout$name)]
   
-  p <- ggraph(net.graph, layout = 'igraph', algorithm = 'kk') + 
+  
+  p.both <- ggraph(both.layout) + 
     geom_node_text(mapping = aes(color = color, label = name, size = 50, fontface = 'bold'), show.legend = F) +
     scale_edge_alpha(guide = 'none') +
     facet_edges(~type) + 
@@ -77,39 +117,72 @@ overlap.network <- function(netfacs.list, min.prob = 0, min.count = 5, significa
       colour="grey",
       label_dodge  = unit(3, "mm"),
       angle_calc = "along", show.legend = F)
+    net.graph.both = net.graph
+
+    
+    net.graph = graph_from_data_frame(condition.element, directed = T, vertices = NULL)
+    V(net.graph)$type <- bipartite_mapping(net.graph)$type
+    node.color = rep(2, length(vertex.attributes(net.graph)$name))
+    node.color[vertex.attributes(net.graph)$name%in%multi.net[,1]] = 3
+    node.label = vertex.attributes(net.graph)$name
+    node.size = rep(4, length(vertex.attributes(net.graph)$name))
+    node.size[vertex.attributes(net.graph)$name%in%multi.net[,1]] = 8
+    edge.size = edge.attributes(net.graph)$probability * 5
+    V(net.graph)$size = node.size*8
+    V(net.graph)$color <- ifelse(V(net.graph)$type, "lightblue", "salmon")
+    V(net.graph)$shape <- ifelse(V(net.graph)$type, "circle", "square")
+    if(clusters == T){V(net.graph)$color = memb.colour$com[match(V(net.graph)$name, memb.colour$node)]}
+    
+    spec.layout <- create_layout(net.graph, layout = 'igraph', algorithm = 'kk')
+    spec.layout$x = all.layout$x[match(spec.layout$name, all.layout$name)]
+    spec.layout$y = all.layout$y[match(spec.layout$name, all.layout$name)]
+    
+    p.specificity <- ggraph(spec.layout) + 
+      geom_node_text(mapping = aes(color = color, label = name, size = 50, fontface = 'bold'), show.legend = F) +
+      scale_edge_alpha(guide = 'none') +
+      theme_graph(base_family = "sans") +
+      ggtitle('Context Specificity P(Context|Element)') +
+      geom_edge_fan(mapping = aes(
+        label = round(probability, 2), colour = type), label_size = 3,
+        arrow = arrow(type = "closed", angle = 15, length = unit(2,'mm')), 
+        end_cap = circle(2, 'mm'), 
+        start_cap = circle(2, 'mm'), 
+        colour="grey",
+        label_dodge  = unit(3, "mm"),
+        angle_calc = "along", show.legend = F)
   
+    
+    multi.net.short = multi.net[multi.net$specificity>specificity,]
+    net.graph.short = graph_from_data_frame(multi.net.short, directed = F, vertices = NULL)
+    V(net.graph.short)$type <- bipartite_mapping(net.graph.short)$type
+    node.color = rep(2, length(vertex.attributes(net.graph.short)$name))
+    node.color[vertex.attributes(net.graph.short)$name%in%multi.net.short[,1]] = 3
+    node.label = vertex.attributes(net.graph.short)$name
+    node.size = rep(4, length(vertex.attributes(net.graph.short)$name))
+    node.size[vertex.attributes(net.graph.short)$name%in%multi.net.short[,1]] = 8
+    edge.size = edge.attributes(net.graph.short)$probability * 5
+    V(net.graph.short)$size = node.size*8
+    V(net.graph.short)$color <- ifelse(V(net.graph.short)$type, "lightblue", "salmon")
+    V(net.graph.short)$shape <- ifelse(V(net.graph.short)$type, "circle", "square")
+    V(net.graph.short)$shape <- ifelse(V(net.graph.short)$type, "bold", "italic")
+    if(clusters == T){V(net.graph.short)$color = memb.colour$com[match(V(net.graph.short)$name, memb.colour$node)]}
+    
+    red.layout <- create_layout(net.graph.short, layout = 'igraph', algorithm = 'kk')
+    red.layout$x = all.layout$x[match(red.layout$name, all.layout$name)]
+    red.layout$y = all.layout$y[match(red.layout$name, all.layout$name)]
+    
+    p.reduced <- ggraph(red.layout) + 
+      geom_node_text(mapping = aes(color = color, label = name, size = 50, fontface = shape), show.legend = F) +
+      scale_edge_alpha(guide = 'none') +
+      theme_graph(base_family = "sans") +
+      ggtitle('Edges with high specificity and occurrence') +
+      geom_edge_fan(
+        arrow = NULL, 
+        end_cap = circle(2, 'mm'), 
+        start_cap = circle(2, 'mm'), 
+        colour="grey",
+        label_dodge  = unit(3, "mm"),
+        angle_calc = "along", show.legend = F)
   
-  multi.net.short = multi.net[multi.net$specificity>specificity,]
-  net.graph.short = graph_from_data_frame(multi.net.short, directed = F, vertices = NULL)
-  V(net.graph.short)$type <- bipartite_mapping(net.graph.short)$type
-  node.color = rep(2, length(vertex.attributes(net.graph.short)$name))
-  node.color[vertex.attributes(net.graph.short)$name%in%multi.net.short[,1]] = 3
-  node.label = vertex.attributes(net.graph.short)$name
-  node.size = rep(4, length(vertex.attributes(net.graph.short)$name))
-  node.size[vertex.attributes(net.graph.short)$name%in%multi.net.short[,1]] = 8
-  edge.size = edge.attributes(net.graph.short)$probability * 5
-  V(net.graph.short)$size = node.size*8
-  V(net.graph.short)$color <- ifelse(V(net.graph.short)$type, "lightblue", "salmon")
-  V(net.graph.short)$shape <- ifelse(V(net.graph.short)$type, "circle", "square")
-  V(net.graph.short)$shape <- ifelse(V(net.graph.short)$type, "bold", "italic")
-  if(clusters == T){
-    xx = data.frame(com = cluster_fast_greedy(as.undirected(net.graph))$membership, node = V(net.graph)$name)
-    xx = xx$com[match(V(net.graph.short)$name, V(net.graph)$name)]
-    xx = xx[complete.cases(xx)]
-    V(net.graph.short)$color <- xx
-  }
-  q <- ggraph(net.graph.short, layout = 'igraph', algorithm = 'kk') + 
-    geom_node_text(mapping = aes(color = color, label = name, size = 50, fontface = shape), show.legend = F) +
-    scale_edge_alpha(guide = 'none') +
-    theme_graph(base_family = "sans") +
-    geom_edge_fan(
-      arrow = NULL, 
-      end_cap = circle(2, 'mm'), 
-      start_cap = circle(2, 'mm'), 
-      colour="grey",
-      label_dodge  = unit(3, "mm"),
-      angle_calc = "along", show.legend = F)
-  
-  
-  return(list(graph = p, data = multi.net, reduced.graph = q, network = net.graph, modularity = modularity(cluster_fast_greedy(as.undirected(net.graph)))))
+  return(list(specificity = p.specificity, occurrence = p.occurrence, both = p.both, reduced = p.reduced, data = multi.net, network = net.graph.both, modularity = modularity(cluster_fast_greedy(as.undirected(net.graph.both), weights = NULL))))
 }
