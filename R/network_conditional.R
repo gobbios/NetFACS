@@ -28,7 +28,7 @@
 #'  conditional.net = network.conditional(angry.face, package = 'igraph')
 
 
-network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0, min.count = 0){
+network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0, min.count = 0, ignore.element = NULL){
   library(arules)
   require(ggplot2)
   require(scales)
@@ -42,7 +42,8 @@ network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0, 
   rs$rules = gsub(" ",",",rs$rules)
   xrs = unlist(rs$rules)
   x.elements = lapply(xrs, function(x){
-    unlist(strsplit(x, split = ",", fixed = T))
+    xx = unlist(strsplit(x, split = ",", fixed = T))
+    return(xx)
   })
   x.elements = lapply(x.elements, function(x){x[x!='']})
   rs$combination.size = sapply(x.elements,FUN = length)
@@ -67,7 +68,7 @@ network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0, 
   rs$`P(A+B)` = round(rs$`P(A+B)`, 3)
   rs$`P(A|B)` = round(rs$`P(A|B)`, 3)
   
-  compare.mat = rs[rs$`P(A|B)` >= min.prob & rs$`count` >= min.count,]
+  compare.mat = rs[rs$`P(A|B)` >= min.prob & rs$`count` >= min.count & !rs$elementA%in%ignore.element & !rs$elementB%in%ignore.element,]
   
   descriptive.graph = graph_from_data_frame(compare.mat, directed = T, vertices = NULL)
   vertex.attributes(descriptive.graph)$element.probability = rs.1$support[match(vertex.attributes(descriptive.graph)$name, rs.1$rules)]
@@ -84,19 +85,8 @@ network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0, 
   net.graph = descriptive.graph
   
   node.label = vertex.attributes(net.graph)$name
-  node.size = vertex.attributes(net.graph)$element.probability
-  node.size[node.size >0.01] = 1
-  node.size[node.size <=0.01] = 2
-  node.size[is.na(node.size)] = 1
-  edge.weight = edge.attributes(net.graph)$weight
-  edge.size = cut(edge.weight, 3)
-  edge.size.char = as.character(edge.size)
-  edge.size.char[edge.size==levels(edge.size)[1]] = 1
-  edge.size.char[edge.size==levels(edge.size)[2]] = 2
-  edge.size.char[edge.size==levels(edge.size)[3]] = 3
-  edge.size = as.numeric(edge.size.char)
-  if(length(unique(edge.size))==1){edge.size = edge.size/edge.size}
-  
+  vertex.attributes(net.graph)$node.size = strength(net.graph, mode = 'all')
+
   p = ggraph(graph = net.graph, layout = 'igraph', algorithm = 'kk') +
     geom_edge_link(mapping = aes (label = weight), label_size = 3,
                    arrow = arrow(type = "closed", angle = 15, length = unit(3,'mm')), 
@@ -105,8 +95,7 @@ network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0, 
                    colour="grey",
                    label_dodge  = unit(3, "mm"),
                    angle_calc = "along", show.legend = F) +
-    geom_node_text(mapping = aes(label = name, size = 50, fontface = 'bold'), show.legend = F) +
-    scale_edge_alpha(guide = 'none') +
+    geom_node_text(mapping = aes(label = name, size = node.size, fontface = 'bold'), show.legend = F) + scale_size(range = c(3,7), breaks = NULL) +
     theme_graph()
   
   
