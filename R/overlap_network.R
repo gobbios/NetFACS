@@ -52,10 +52,12 @@ overlap.network <- function(netfacs.list, min.prob = 0, min.count = 5, significa
   condition.element$type = 'Context Specificity (P[Context|Element])'
   element.condition$type = 'Occurrence Probability (P[Element|Context])'
   
+  modularity.net = NA
   if(clusters == T){
     net.graph = graph_from_data_frame(element.condition, directed = F, vertices = NULL)
     V(net.graph)$type <- bipartite_mapping(net.graph)$type
-    memb.colour = data.frame(com = cluster_fast_greedy(as.undirected(net.graph))$membership, node = V(net.graph)$name)
+    memb.colour = data.frame(com = cluster_fast_greedy(net.graph, weights = E(net.graph)$probability)$membership, node = V(net.graph)$name)
+    modularity.net = modularity(cluster_fast_greedy(net.graph, weights = E(net.graph)$probability))
   }
   
   
@@ -86,7 +88,8 @@ overlap.network <- function(netfacs.list, min.prob = 0, min.count = 5, significa
       colour="grey",
       label_dodge  = unit(3, "mm"),
       angle_calc = "along", show.legend = F)
-
+  
+  
   net.graph = graph_from_data_frame(rbind(condition.element, element.condition), directed = T, vertices = NULL)
   V(net.graph)$type <- bipartite_mapping(net.graph)$type
   node.color = rep(2, length(vertex.attributes(net.graph)$name))
@@ -184,5 +187,5 @@ overlap.network <- function(netfacs.list, min.prob = 0, min.count = 5, significa
         label_dodge  = unit(3, "mm"),
         angle_calc = "along", show.legend = F)
   
-  return(list(specificity = p.specificity, occurrence = p.occurrence, both = p.both, reduced = p.reduced, data = multi.net, network = net.graph.both, modularity = modularity(cluster_fast_greedy(as.undirected(net.graph.both), weights = NULL))))
+  return(list(specificity = p.specificity, occurrence = p.occurrence, both = p.both, reduced = p.reduced, data = multi.net, network = net.graph.both, modularity = modularity.net))
 }

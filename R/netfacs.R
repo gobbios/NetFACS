@@ -227,7 +227,7 @@ netfacs <- function(data, condition = NULL, test.condition = NULL, null.conditio
     ### for specificity, determine how often the combination occurs across test and null condition and then divide observed count in test by the sum
     xx = rs.null$count[match(rs.test$combination, rs.null$combination)]
     xx[is.na(xx)] = 0
-    rs.test$specificity = rs.test$count / (rs.test$count + xx)
+    rs.test$specificity = (rs.test$count/(nrow(data.test) + nrow(data.null))) / ((rs.test$count + xx)/(nrow(data.test) + nrow(data.null)))
     
     rs.test$probability.increase = as.numeric(lapply(1:nrow(boot.probability),function(z){ # create probability increase by comparing the observed probability with the mean probability of the randomisation process
       m=mean(boot.probability[z,])
