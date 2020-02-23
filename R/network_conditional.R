@@ -85,7 +85,7 @@ network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0, 
   net.graph = descriptive.graph
   
   node.label = vertex.attributes(net.graph)$name
-  vertex.attributes(net.graph)$node.size = strength(net.graph, mode = 'all')
+  vertex.attributes(net.graph)$node.size = vertex.attributes(net.graph)$element.probability
 
   p = ggraph(graph = net.graph, layout = 'igraph', algorithm = 'kk') +
     geom_edge_link(mapping = aes (label = weight), label_size = 3,
