@@ -7,6 +7,7 @@
 #' @param package should the graph object be created in sna or igraph?
 #' @param min.prob minimum conditional probability that should be shown in the graph
 #' @param min.count minimum number of times that a combination should occur before being included in the graph
+#' @param ignore.element string vector, can be used to exclude certain elements when creating the plots
 #'
 #' @return Function returns a dataframe that includes all dyadic combinations and their observed and conditional probabilities
 #' 
@@ -25,7 +26,7 @@
 #'  random.level = NULL,
 #'  combination.size = 5)
 #'  
-#'  conditional.net = network.conditional(angry.face, package = 'igraph')
+#'  conditional.net = network.conditional(angry.face, package = 'igraph', min.prob = 0.01, min.count = 3, ignore.element = '25')
 
 
 network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0, min.count = 0, ignore.element = NULL){
@@ -95,7 +96,7 @@ network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0, 
                    colour="grey",
                    label_dodge  = unit(3, "mm"),
                    angle_calc = "along", show.legend = F) +
-    geom_node_text(mapping = aes(label = name, size = node.size, fontface = 'bold'), show.legend = F) + scale_size(range = c(3,7), breaks = NULL) +
+    geom_node_text(mapping = aes(label = name, size = node.size, fontface = 'bold'), show.legend = F) + scale_size(range = c(2,7)) +
     theme_graph()
   
   

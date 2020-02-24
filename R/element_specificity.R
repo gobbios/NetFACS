@@ -5,7 +5,7 @@
 #' 
 #' @param netfacs.data object resulting from netfacs() function
 #'
-#' @return Function returns a dataframe that includes all elements and first-order combinations that occur at all, the number of combinations that element is in, and how much adding this element to a combination adds on average to its specificity
+#' @return Function returns a list with two dataframe that include all elements and first-order combinations that occur at all, the number of combinations that element is in, and how much adding this element to a combination adds on average to its specificity
 #' 
 #' @export
 #'
@@ -28,23 +28,32 @@
 
 element.specificity <- function(netfacs.data){
   
+  # create dataset
   data = netfacs.data$result
+  
+  # if no specificity exists (i.e. the test data was compared against random), show error message
   if(!'specificity'%in%colnames(data)){return(print('Results are not part of comparison and do not reveal anything about specificity.'))}
   
+  # select only elements and first order combinations
   xx = data$combination[data$combination.size %in% c(1,2) & data$observed.probability>0]
+  
+  # create new dataframe only for those elements
   element.specificity = data.frame(element = xx, number.combinations = 0, specificity.increase = 0)
   rownames(element.specificity) = xx
+  
+  # make list of all possible 
   all.combinations = lapply(data$combination, function(x){unlist(strsplit(x, split = '_', fixed = T))})
   
+  # for each element and first order combination, count how many combinations this one is part of
   ii = lapply(rownames(element.specificity), function(i){
     x.i = unlist(strsplit(as.character(i), split = '_', fixed = T))
     elements.with = data[unlist(lapply(all.combinations, function(z) length(intersect(x.i, unlist(z)))==length(x.i))),]
     combinations.with = all.combinations[unlist(lapply(all.combinations, function(z) length(intersect(x.i, unlist(z)))==length(x.i)))]
     return(length(combinations.with))
   })
-  
   element.specificity$number.combinations=unlist(ii)
   
+  # calculate for each element/combination the specificity of all combinations that have this element/combination, and those which are composed of all the same other elements minus the one in question
   ii = lapply(rownames(element.specificity), function(i){
     x.i = unlist(strsplit(as.character(i), split = '_', fixed = T))
     elements.with = data[unlist(lapply(all.combinations, function(z) length(intersect(x.i, unlist(z)))==length(x.i))),]
@@ -58,13 +67,15 @@ element.specificity <- function(netfacs.data){
     specificity.without = data$specificity[data$combination%in%unlist(combinations.without)]
     return(mean(specificity.with) - mean(specificity.without))
   })
-  
   element.specificity$specificity.increase=unlist(ii)
+  
+  # order by increase in specificity
   element.specificity = element.specificity[order(-1*element.specificity$specificity.increase),]
   
-  
+  #make pretty
   element.specificity$specificity.increase = round(element.specificity$specificity.increase, 3)
-  combinations = grepl(element.specificity$element, pattern = '_', fixed = T)
+  
+  combinations = grepl(element.specificity$element, pattern = '_', fixed = T) # this is used to differentiate between single elements and combinations
   
   element.specificity = list(element = element.specificity[!combinations,], dyad = element.specificity[combinations,])
   

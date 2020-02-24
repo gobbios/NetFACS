@@ -40,11 +40,7 @@
 
 
 netfacs <- function(data, condition = NULL, test.condition = NULL, null.condition=NULL, duration = NULL, ran.trials = 1000, control = NULL, random.level = NULL, combination.size = NULL){
-  require(arules) # arules package is the basis for most of the probability calculations, considerably faster than most other packages and has some interesting features
-  require(parallel)
-  require(doParallel)
-  require(pbapply)
-  
+  # arules package is the basis for most of the probability calculations, considerably faster than most other packages and has some interesting features
   # fix column names of dataset to not include special characters or spaces
   colnames(data) = gsub(colnames(data), pattern = ' ', replacement = '', fixed = T) 
   colnames(data) = gsub(colnames(data), pattern = '+', replacement = '', fixed = T)

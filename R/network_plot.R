@@ -4,7 +4,7 @@
 #' 
 #' @param netfacs.graph igraph network object resulting from netfacs.network() function
 #' @param title string of the graph's main title
-#' @param clusters if TRUE, the igraph::walktrap.community function is used to establish possible clusters in the dataset
+#' @param clusters if TRUE, the igraph::cluster_fast_greedy function is used to establish possible clusters in the dataset
 #'
 #' @return Function returns a ggnet plot of the network, where the size of nodes indicates how often they occur on their own, and edges indicate significant co-occurrance between them
 #' 
@@ -35,20 +35,16 @@
 
 
 network.plot <- function(netfacs.graph, title = 'network', clusters = T){
-  require(igraph)
-  require(ggplot2)
-  require(ggnet)
-  require(scales)
-  
+  #load packages
   net.graph = netfacs.graph
   
-  node.label = vertex.attributes(net.graph)$name
-  node.size = vertex.attributes(net.graph)$element.significance
-  node.size[node.size >0.01] = 2
-  node.size[node.size <=0.01] = 3
+  # prepare node and edge information
+  node.label = vertex.attributes(net.graph)$name #nodes are named as they were in the original network object
+  node.size = vertex.attributes(net.graph)$element.probability #size of nodes is determined by their probability to occur
   node.size[is.na(node.size)] = 1
-  edge.weight = edge.attributes(net.graph)$weight
-  edge.size = cut(edge.weight, 3)
+  
+  edge.weight = edge.attributes(net.graph)$weight # weight of edges is determined by their weight attribute
+  edge.size = cut(edge.weight, 3) # the line width of the edges is assinged to either weak, medium, strong
   edge.size.char = as.character(edge.size)
   edge.size.char[edge.size==levels(edge.size)[1]] = 1
   edge.size.char[edge.size==levels(edge.size)[2]] = 3
@@ -56,23 +52,53 @@ network.plot <- function(netfacs.graph, title = 'network', clusters = T){
   edge.size = as.numeric(edge.size.char)
   if(length(unique(edge.size))==1){edge.size = edge.size/edge.size}
   
+  # if 'cluster' is not selected, the graph is plotted in black and white
   if(clusters == F){
-    p = ggnet2(net.graph, node.size = node.size * 4, color = 'lightblue', edge.size = edge.size, label = node.label, label.size = node.size*3, label.color = 'black', mode = "kamadakawai")  +
-      guides(color = FALSE, size = FALSE) + ggtitle(title) +
-      theme(plot.title = element_text(hjust = 0.5))
-    
+    p = ggraph(graph = net.graph, 
+               layout = 'igraph', 
+               algorithm = 'kk') + # algorithm could be changed, e.g. to 'graphopt'
+      geom_edge_link(mapping = aes (label = round(observed.probability,2)), # this creates and changes the edges
+                     arrow = NULL,
+                     colour="grey",
+                     end_cap = circle(2, 'mm'), , 
+                     start_cap = circle(2, 'mm'), 
+                     label_dodge  = unit(3, "mm"),
+                     angle_calc = "along",
+                     show.legend = F) +
+      geom_node_text(mapping = aes(label = name, # this creates and changes the nodes
+                                   size = node.size, 
+                                   fontface = 'bold'),
+                     show.legend = F) + 
+      scale_size(range = c(2,7)) +
+      theme_graph()
   }
   
+  # if 'clusters' == T, then the fast and greedy algorithm is used to detect clusters and color the nodes accordingly
   if(clusters == T){
     net.un = net.graph
-    net.community = igraph::cluster_fast_greedy(net.un)
-    modular = round(igraph::modularity(net.community), 2)
+    net.community = igraph::cluster_fast_greedy(net.un) # other clustering algorithms exist, eg walktrap
+    modular = round(igraph::modularity(net.community), 2) # modularity measure. Above 0.3 is good modularity
     net.com = data.frame(element = net.community$names, community = net.community$membership)
     color = rainbow(length(unique(net.com$community)))
     
-    p = ggnet2(net.graph, node.size = node.size * 4, color = color[net.com$community], edge.size = edge.size, label = node.label, label.size = node.size*3, label.color = 'black', mode = "kamadakawai")  +
-      guides(color = FALSE, size = FALSE) + ggtitle(paste(c(title, modular), collapse = ' , modularity = ')) +
-      theme(plot.title = element_text(hjust = 0.5))
+    p = ggraph(graph = net.graph, # see above
+               layout = 'igraph', 
+               algorithm = 'kk') +
+      geom_edge_link(mapping = aes (label = round(observed.probability,2)),
+                     arrow = NULL,
+                     colour="grey",
+                     end_cap = circle(2, 'mm'), , 
+                     start_cap = circle(2, 'mm'), 
+                     label_dodge  = unit(3, "mm"),
+                     angle_calc = "along",
+                     show.legend = F) +
+      geom_node_text(mapping = aes(label = name, 
+                                   color = color[net.com$community], 
+                                   size = node.size, 
+                                   fontface = 'bold'),
+                     show.legend = F) + 
+      scale_size(range = c(2,7)) +
+      theme_graph()
   }
   return(p)
 }
