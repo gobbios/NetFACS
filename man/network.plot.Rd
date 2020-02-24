@@ -11,7 +11,7 @@ network.plot(netfacs.graph, title = "network", clusters = T)
 
 \item{title}{string of the graph's main title}
 
-\item{clusters}{if TRUE, the igraph::walktrap.community function is used to establish possible clusters in the dataset}
+\item{clusters}{if TRUE, the igraph::cluster_fast_greedy function is used to establish possible clusters in the dataset}
 }
 \value{
 Function returns a ggnet plot of the network, where the size of nodes indicates how often they occur on their own, and edges indicate significant co-occurrance between them

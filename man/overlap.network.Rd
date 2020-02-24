@@ -16,12 +16,24 @@ overlap.network(
 }
 \arguments{
 \item{netfacs.list}{list of objects resulting from netfacs() function or multiple.netfacs() function}
+
+\item{min.prob}{minimum conditional probability that should be shown in the graph}
+
+\item{min.count}{minimum number of times that a combination should occur before being included in the graph}
+
+\item{significance}{sets the level of significance that combinations have to pass before added to the network}
+
+\item{specificity}{for the 'reduced' graph, select only elements that surpass this context specificity value}
+
+\item{ignore.element}{string vector, can be used to exclude certain elements when creating the plots}
+
+\item{clusters}{boolean; if TRUE, the cluster_fast_greedy algorithm is used to detect underlying community structure, based on the occurrence probability network}
 }
 \value{
-Function returns a ggnet plot where each condition is connected to those elements that occur significantly in this condition, and each element is connected to each condition under which it occurs significantly more than expected
+Function returns a ggraph plot where each condition is connected to those elements that occur significantly in this condition, and each element is connected to each condition under which it occurs significantly more than expected. Creates four graphs: context specificity, occurrence, a combined graph, and a 'reduced' graph where edges are only included if they pass the 'specificity' value set by the user
 }
 \description{
-The function takes multiple netfacs objects and plots how different elements connect the conditions
+The function takes multiple netfacs objects and plots how different elements connect the conditions, based on the conditional probabilities that the element occurs in the condition and that the condition is seen when the element is present
 }
 \examples{
 data(emotions_set)
@@ -33,5 +45,5 @@ emo.faces = multiple.netfacs(data = emotions_set[[1]],
  random.level = NULL,
  combination.size = 5)
  
- overlap.network(emo.faces)
+ overlap.network(emo.faces, min.prob = 0.01, min.count = 3, significance = 0.01, specificity = 0.5, ignore.element = '25', clusters = T)
 }

@@ -20,6 +20,8 @@ network.conditional(
 \item{min.prob}{minimum conditional probability that should be shown in the graph}
 
 \item{min.count}{minimum number of times that a combination should occur before being included in the graph}
+
+\item{ignore.element}{string vector, can be used to exclude certain elements when creating the plots}
 }
 \value{
 Function returns a dataframe that includes all dyadic combinations and their observed and conditional probabilities
@@ -40,5 +42,5 @@ angry.face = netfacs(data = emotions_set[[1]],
  random.level = NULL,
  combination.size = 5)
  
- conditional.net = network.conditional(angry.face, package = 'igraph')
+ conditional.net = network.conditional(angry.face, package = 'igraph', min.prob = 0.01, min.count = 3, ignore.element = '25')
 }

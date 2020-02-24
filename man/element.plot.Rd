@@ -10,7 +10,7 @@ element.plot(netfacs.data)
 \item{netfacs.data}{object resulting from netfacs() function}
 }
 \value{
-Function returns a ggplot showing for each element by how much the observed probability outperforms the expected probabilities
+Function returns a ggplot showing for each element by how much the observed probability outperforms the expected probabilities; if expected probabilities are 0, the probability increase is set to 10; y-axis is log transformed
 }
 \description{
 The function takes all single elements in a netfacs object, and plots the distribution of ratios between the observed value and all randomisations

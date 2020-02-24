@@ -10,7 +10,7 @@ entropy.overall(netfacs.data)
 \item{netfacs.data}{object resulting from netfacs() function}
 }
 \value{
-Function returns the ratio of observed entropy/ expected entropy. Expected entropy is based on randomization and represents the maximum entropy a dataset with the same properties as this one can reach. The further the ratio is from 1, the more ordered the data are.
+Function returns the ratio of observed entropy/expected entropy. Expected entropy is based on randomization (shuffling the observed elements while maintaining the number of elements per row) and represents the maximum entropy a dataset with the same properties as this one can reach. Ratios closer to 0 are more ordered; ratios closer to 1 are more random.
 }
 \description{
 Establishes how'ordered' the data is: values close to 0 indicate that combinations are highly repetitive and predictable, while values close to 1 indicate that combinations are equiprobable and prediction of future combinations is difficult

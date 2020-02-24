@@ -10,7 +10,7 @@ element.specificity(netfacs.data)
 \item{netfacs.data}{object resulting from netfacs() function}
 }
 \value{
-Function returns a dataframe that includes all elements and first-order combinations that occur at all, the number of combinations that element is in, and how much adding this element to a combination adds on average to its specificity
+Function returns a list with two dataframe that include all elements and first-order combinations that occur at all, the number of combinations that element is in, and how much adding this element to a combination adds on average to its specificity
 }
 \description{
 The function takes all elements and dyadic combinations of elements in a netfacs object, goes through all combinations these elements are in, and compares the specificity (strength with which the combination identifies the test condition) of all combinations with the element and the same combinations without the element, to test how much specificity the element adds when added to a signal. Only works for netfacs objects based on comparison between conditions.
