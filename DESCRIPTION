@@ -1,6 +1,6 @@
 Package: NetFACS
 Title: Network Applications to Facial Communication Data
-Version: 0.15
+Version: 0.16
 Authors@R: 
     person(given = "Alex",
            family = "Mielke",
