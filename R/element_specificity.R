@@ -28,6 +28,9 @@
 
 element.specificity <- function(netfacs.data){
   
+  # set digits printed to 3
+  options(digits = 3)
+  
   # create dataset
   data = netfacs.data$result
   

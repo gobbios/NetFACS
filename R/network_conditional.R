@@ -30,13 +30,9 @@
 
 
 network.conditional <- function(netfacs.data, package = 'igraph', min.prob = 0, min.count = 0, ignore.element = NULL){
-  library(arules)
-  require(ggplot2)
-  require(scales)
-  suppressMessages(require(ggnet))
-  suppressMessages(require(igraph))
-  suppressMessages(require(sna))
-  suppressMessages(require(intergraph))
+  
+  # set digits printed to 3
+  options(digits = 3)
   
   rs = as(netfacs.data$arules, "data.frame") 
   rs$rules = gsub("[^A-Za-z0-9, ]","",rs$rules)

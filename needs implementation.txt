@@ -1,5 +1,7 @@
 ############ still to implement
 
+# We should create a proper website for the package using 'pkgdown' (https://pkgdown.r-lib.org/articles/pkgdown.html)
+
 # create functions that turns different data structures into 0/1 format
 # temporal structure on the element level (probability of element A followed by element B); potentially using Monte Carlo Markov Chains
 # create temporal relationships same way as static relationships to allow for use of same networks etc

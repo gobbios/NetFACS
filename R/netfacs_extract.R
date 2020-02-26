@@ -30,6 +30,9 @@
 
 netfacs.extract <- function(netfacs.data, level = 1, min.count = 1, min.prob = 0, min.specificity = 0, significance = 0.01){
   
+  # set digits printed to 3
+  options(digits = 3)
+  
   net.data = netfacs.data$result[netfacs.data$result$combination.size==level,]
   if(is.null(netfacs.data$used.parameters$test.condition)){
     net.data$specificity = 1

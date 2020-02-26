@@ -26,8 +26,9 @@
 
 
 netfacs.clustering <- function(netfacs.data, condition = NULL){
-  library(umap)
-  library(ggplot2)
+  
+  # set digits printed to 3
+  options(digits = 3)
   
   data = netfacs.data$used.data$data
   data = data[rowSums(data)>0,]

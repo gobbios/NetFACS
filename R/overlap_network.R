@@ -29,6 +29,9 @@
 
 overlap.network <- function(netfacs.list, min.prob = 0, min.count = 5, significance = 0.01, specificity = 0.1, ignore.element = NULL, clusters = F){
 
+  # set digits printed to 3
+  options(digits = 3)
+  
   # if the netfacs.list object doesn't have names for the conditions, they are set to numbers
   if(is.null(names(netfacs.list))){names(netfacs.list)=1:length(netfacs.list)}
   

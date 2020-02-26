@@ -26,6 +26,9 @@
 
 element.plot <- function(netfacs.data){
   
+  # set digits printed to 3
+  options(digits = 3)
+  
   # take only the result part of the netfacs object
   plot.netfacs = netfacs.data$result
   

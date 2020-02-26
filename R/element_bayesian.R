@@ -34,12 +34,8 @@
 
 element.bayesian <- function(netfacs.data, test.elements = NULL, formula, predictors, warmup = 1000, iter = 2000, autocorrelation = F){
   
-  library(tidyverse)
-  library(brms)
-  library(ggplot2)
-  require(parallel)
-  require(doParallel)
-  require(pbapply)
+  # set digits printed to 3
+  options(digits = 3)
   
   # if test elements are not specified, all columns that make up the netfacs dataset are used
   if(is.null(test.elements)){test.elements = colnames(netfacs.data$used.data$data)}

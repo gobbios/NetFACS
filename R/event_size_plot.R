@@ -26,7 +26,9 @@
 
 event.size.plot <- function(netfacs.data){
   
-  require(ggplot2)
+  # set digits printed to 3
+  options(digits = 3)
+  
   plot.netfacs = netfacs.data$event.size.information$total.event.sizes
   plot.netfacs$probability.increase = plot.netfacs$observed.probability / plot.netfacs$expected.probability
   

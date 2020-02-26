@@ -24,7 +24,10 @@
 #'  network.summary.graph(anger.net)
 
 network.summary.graph <- function(netfacs.net){
-  require(igraph)
+  
+  # set digits printed to 3
+  options(digits = 3)
+  
   if(length(unique(edge.attributes(netfacs.net)$weight))==1){type='undirected'}
   if(length(unique(edge.attributes(netfacs.net)$weight))>1){type='weighted'}
   net.from.igraph = data.frame(nr.elements = length(vertex.attributes(netfacs.net)$name),

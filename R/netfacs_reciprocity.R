@@ -27,8 +27,10 @@
 
 
 netfacs.reciprocity <- function(netfacs.data){
-  library(arules)
-
+  
+  # set digits printed to 3
+  options(digits = 3)
+  
   rs = as(netfacs.data$arules, "data.frame") 
   rs$rules = gsub("[^A-Za-z0-9, ]","",rs$rules)
   rs$rules = gsub(" ",",",rs$rules)

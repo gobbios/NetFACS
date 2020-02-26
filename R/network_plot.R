@@ -35,7 +35,10 @@
 
 
 network.plot <- function(netfacs.graph, title = 'network', clusters = T){
-  #load packages
+  
+  # set digits printed to 3
+  options(digits = 3)
+  
   net.graph = netfacs.graph
   
   # prepare node and edge information

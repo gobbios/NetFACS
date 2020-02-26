@@ -19,15 +19,17 @@ Depends:
     vegan,
     parallel,
     doParallel,
+    pbapply,
     arules,
     arulesViz,
-    pbapply,
     igraph,
     sna,
+    intergraph,
     brms,
     ggplot2,
+    ggraph,
     mclust,
     entropy,
-    ggraph
+    umap
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr

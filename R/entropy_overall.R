@@ -27,6 +27,9 @@
   
 entropy.overall <- function(netfacs.data){
 
+  # set digits printed to 3
+  options(digits = 3)
+  
   # take data for the test condition only
   if(is.null(netfacs.data$used.parameters$test.condition)){
     netfacs.data$used.parameters$test.condition = 'all'

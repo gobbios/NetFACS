@@ -47,6 +47,9 @@ netfacs <- function(data, condition = NULL, test.condition = NULL, null.conditio
   colnames(data) = gsub(colnames(data), pattern = '_', replacement = '', fixed = T)
   colnames(data) = gsub(colnames(data), pattern = '.', replacement = '', fixed = T)
   
+  # set digits printed to 3
+  options(digits = 3)
+  
   # determine number of cores for parallelization
   cl=detectCores()-2
   if(cl<1){cl=1}

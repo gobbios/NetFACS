@@ -33,6 +33,9 @@
 
 netfacs.network <- function(netfacs.data, package = 'igraph', link = 'unweighted', significance = 0.01, min.count = 1, min.prob = 0, min.specificity = 0, ignore.element = NULL){
   
+  # set digits printed to 3
+  options(digits = 3)
+  
   ### create dyadic association using dyad.comparison
   compare.mat = netfacs.data$result[netfacs.data$result$combination.size==2,]
   node.weight = netfacs.data$result[netfacs.data$result$combination.size==1,]

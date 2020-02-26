@@ -25,8 +25,10 @@
 
 
 network.summary <- function(netfacs.graph){
-  require(igraph)
-  suppressMessages(require(sna))
+  
+  # set digits printed to 3
+  options(digits = 3)
+  
   net.measure=data.frame(element = unique(unlist(vertex.attributes(netfacs.graph)$name)),
                          strength = 0,
                          eigenvector = 0,
