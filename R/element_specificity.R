@@ -74,9 +74,7 @@ element.specificity <- function(netfacs.data){
   
   # order by increase in specificity
   element.specificity = element.specificity[order(-1*element.specificity$specificity.increase),]
-  
-  #make pretty
-  element.specificity$specificity.increase = round(element.specificity$specificity.increase, 3)
+  element.specificity$count = data$count[match(element.specificity$element, data$combination)]
   
   combinations = grepl(element.specificity$element, pattern = '_', fixed = T) # this is used to differentiate between single elements and combinations
   

@@ -44,7 +44,7 @@ network.plot <- function(netfacs.graph, title = 'network', clusters = T){
   # prepare node and edge information
   node.label = vertex.attributes(net.graph)$name #nodes are named as they were in the original network object
   node.size = vertex.attributes(net.graph)$element.probability #size of nodes is determined by their probability to occur
-  node.size[is.na(node.size)] = 1
+  node.size[is.na(node.size)] = min(node.size, na.rm = T)
   
   edge.weight = edge.attributes(net.graph)$weight # weight of edges is determined by their weight attribute
   edge.size = cut(edge.weight, 3) # the line width of the edges is assinged to either weak, medium, strong
@@ -69,11 +69,12 @@ network.plot <- function(netfacs.graph, title = 'network', clusters = T){
                      angle_calc = "along",
                      show.legend = F) +
       geom_node_text(mapping = aes(label = name, # this creates and changes the nodes
-                                   size = node.size, 
+                                   size = node.size,
                                    fontface = 'bold'),
                      show.legend = F) + 
       scale_size(range = c(2,7)) +
-      theme_graph()
+      ggtitle(title) +  
+      theme_graph(base_family = "sans")
   }
   
   # if 'clusters' == T, then the fast and greedy algorithm is used to detect clusters and color the nodes accordingly
@@ -97,11 +98,12 @@ network.plot <- function(netfacs.graph, title = 'network', clusters = T){
                      show.legend = F) +
       geom_node_text(mapping = aes(label = name, 
                                    color = color[net.com$community], 
-                                   size = node.size, 
+                                   size = node.size,
                                    fontface = 'bold'),
                      show.legend = F) + 
       scale_size(range = c(2,7)) +
-      theme_graph()
+      ggtitle(title) +
+      theme_graph(base_family = "sans")
   }
   return(p)
 }
