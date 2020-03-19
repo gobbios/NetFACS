@@ -10,7 +10,7 @@ arules.explorer(netfacs.data)
 \item{netfacs.data}{netfacs data list}
 }
 \value{
-Starts 'shiny' application of \code{arulesViz::ruleExplorer()} function)
+Starts \code{shiny} app via \code{\link[arulesViz]{ruleExplorer}}
 }
 \description{
 Applies 'shiny' application of arulesViz() package, which allows the user to 
@@ -20,7 +20,7 @@ likelihood of B if A is known), and extract association rules. Includes
 fancy plots
 }
 \examples{
-data(netfacstestdata)
+data(emotions_set)
 angry.face = netfacs(data = emotions_set[[1]],
  condition = emotions_set[[2]]$emotion,
  test.condition = 'anger',
@@ -30,5 +30,5 @@ angry.face = netfacs(data = emotions_set[[1]],
  control = NULL,
  random.level = NULL,
  combination.size = 5)
-arules.explorer(netfacs.data = netfacstestdata)
+arules.explorer(netfacs.data = angry.face)
 }

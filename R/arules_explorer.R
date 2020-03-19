@@ -8,11 +8,11 @@
 #'
 #' @param netfacs.data netfacs data list
 #'
-#' @return Starts 'shiny' application of \code{arulesViz::ruleExplorer()} function)
+#' @return Starts \code{shiny} app via \code{\link[arulesViz]{ruleExplorer}}
 #' @export
 #'
 #' @examples
-#' data(netfacstestdata)
+#' data(emotions_set)
 #' angry.face = netfacs(data = emotions_set[[1]],
 #'  condition = emotions_set[[2]]$emotion,
 #'  test.condition = 'anger',
@@ -22,10 +22,10 @@
 #'  control = NULL,
 #'  random.level = NULL,
 #'  combination.size = 5)
-#' arules.explorer(netfacs.data = netfacstestdata)
+#' arules.explorer(netfacs.data = angry.face)
 
 
 
 arules.explorer <- function(netfacs.data) {
-  arules::ruleExplorer(netfacs.data$arules)
+  arulesViz::ruleExplorer(netfacs.data$arules)
 }
