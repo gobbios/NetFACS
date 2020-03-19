@@ -10,10 +10,14 @@ arules.explorer(netfacs.data)
 \item{netfacs.data}{netfacs data list}
 }
 \value{
-Starts 'shiny' application of arulesViz::ruleExplorer() function)
+Starts 'shiny' application of \code{arulesViz::ruleExplorer()} function)
 }
 \description{
-Applies 'shiny' application of arulesViz() package, which allows the user to set the support (probability of elements co-occurring), confidence (likelihood of B occurring when A is present), and lift (increase in likelihood of B if A is known), and extract association rules. Includes fancy plots
+Applies 'shiny' application of arulesViz() package, which allows the user to 
+set the support (probability of elements co-occurring), confidence 
+(likelihood of B occurring when A is present), and lift (increase in 
+likelihood of B if A is known), and extract association rules. Includes 
+fancy plots
 }
 \examples{
 data(netfacstestdata)

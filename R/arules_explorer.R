@@ -1,10 +1,14 @@
 #' Use arulesViz::ruleExplorer on NetFACS data
 #'
-#' Applies 'shiny' application of arulesViz() package, which allows the user to set the support (probability of elements co-occurring), confidence (likelihood of B occurring when A is present), and lift (increase in likelihood of B if A is known), and extract association rules. Includes fancy plots 
+#' Applies 'shiny' application of arulesViz() package, which allows the user to 
+#' set the support (probability of elements co-occurring), confidence 
+#' (likelihood of B occurring when A is present), and lift (increase in 
+#' likelihood of B if A is known), and extract association rules. Includes 
+#' fancy plots 
 #'
 #' @param netfacs.data netfacs data list
 #'
-#' @return Starts 'shiny' application of arulesViz::ruleExplorer() function)
+#' @return Starts 'shiny' application of \code{arulesViz::ruleExplorer()} function)
 #' @export
 #'
 #' @examples
@@ -22,7 +26,6 @@
 
 
 
-arules.explorer <- function(netfacs.data){
-  require(arules)
-  ruleExplorer(netfacs.data$arules)
+arules.explorer <- function(netfacs.data) {
+  arules::ruleExplorer(netfacs.data$arules)
 }
